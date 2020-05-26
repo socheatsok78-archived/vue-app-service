@@ -19,7 +19,7 @@ export default class ServiceRegistry {
     /**
      * @type {AxiosRequestConfig} Request config
      */
-    #config;
+    #config = {};
 
     /**
      * @type {Object.<string, ServiceMethod>} Service methods
@@ -35,7 +35,7 @@ export default class ServiceRegistry {
         this.name = service.name || `__Service__${Date.now()}`
         this.description = service.description || ''
 
-        this._createHttpInstance(service.config);
+        this._createHttpInstance(service.config || {});
         this._bootstrapMethods(service.methods);
     }
 

@@ -49,8 +49,6 @@ export default class ServiceContainer {
 
         delete this.#services[name];
         delete this[name];
-
-        return service;
     }
 
     /**
