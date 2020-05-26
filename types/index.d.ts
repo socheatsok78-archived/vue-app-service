@@ -8,8 +8,8 @@ export type ApplicationOptions = {
 
 export type ServiceRegistryOptions = {
     name: string,
-    description: string,
-    config: AxiosRequestConfig,
+    description?: string,
+    config?: AxiosRequestConfig,
     methods: ServiceMethods
 }
 
