@@ -1,4 +1,4 @@
-import { VueConstructor } from "vue/types";
+import VueConstructor from "vue";
 
 export default class VueAppServicePlugin {
     /**
