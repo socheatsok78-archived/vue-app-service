@@ -1,6 +1,11 @@
 import { VueConstructor } from "vue/types";
 import { AxiosStatic, AxiosRequestConfig } from "axios/index";
 
+export type ApplicationOptions = {
+    name: string,
+    description: string,
+}
+
 export type ServiceRegistryOptions = {
     name: string,
     description: string,
@@ -32,9 +37,9 @@ export default class Application {
 
     /**
      * Create new Application instance
-     * @param {AxiosRequestConfig} config
+     * @param {ApplicationOptions} config
      */
-    constructor(config: AxiosRequestConfig);
+    constructor(config: ApplicationOptions);
 
     /**
      * @returns {ServiceContainer} ServiceContainer
