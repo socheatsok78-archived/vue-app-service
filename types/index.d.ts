@@ -94,3 +94,11 @@ export class ServiceRegistry {
      */
     get $config(): AxiosRequestConfig;
 }
+
+export class VueAppServicePlugin {
+    /**
+     * Install Vue App Service Plugin
+     * @param {VueConstructor} Vue
+     */
+    static install(Vue: VueConstructor): void;
+}
