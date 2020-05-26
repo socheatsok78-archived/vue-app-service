@@ -45,8 +45,6 @@ export default class ServiceContainer {
             this._throwServiceNotExistException(name);
         }
 
-        const service = this.#services[name];
-
         delete this.#services[name];
         delete this[name];
     }

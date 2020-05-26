@@ -36,7 +36,7 @@ export default class ServiceRegistry {
         this.description = service.description || ''
 
         this._createHttpInstance(service.config || {});
-        this._bootstrapMethods(service.methods || {});
+        this._bootstrapMethods(service.methods);
     }
 
     /**
