@@ -1,7 +1,8 @@
 {
   "name": "vue-app-service",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "types/index.d.ts",
   "repository": "git@github.com:socheatsok78/vue-api-gateway.git",
   "author": "Socheat Sok <alex@socheat.net>",
   "license": "MIT",
