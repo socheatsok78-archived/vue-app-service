@@ -12,15 +12,12 @@ export type ServiceMethods = {
     [key: string]: ServiceMethod
 }
 
-export type ServiceMethod = {
-    options: ServiceMethodOptions,
-    payload: <T>() => T
-}
-
 export type ServiceMethodOptions = {
     $axios: AxiosStatic,
     $config: AxiosRequestConfig
 }
+
+export type ServiceMethod = <T>(options: ServiceMethodOptions, payload: <T>() => T) => T;
 
 export default class Application {
     /**
