@@ -55,7 +55,7 @@ class ServiceRegistry {
 
     _config.set(this, {
       writable: true,
-      value: void 0
+      value: {}
     });
 
     _defineProperty(this, "methods", {});
@@ -63,9 +63,9 @@ class ServiceRegistry {
     this.name = service.name || "__Service__".concat(Date.now());
     this.description = service.description || '';
 
-    this._createHttpInstance(service.config);
+    this._createHttpInstance(service.config || {});
 
-    this._bootstrapMethods(service.methods);
+    this._bootstrapMethods(service.methods || {});
   }
   /**
    * @returns {axios} Request instance

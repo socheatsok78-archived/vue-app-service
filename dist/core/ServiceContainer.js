@@ -73,7 +73,6 @@ class ServiceContainer {
 
     delete _classPrivateFieldGet(this, _services)[name];
     delete this[name];
-    return service;
   }
   /**
    * Complete register a new ServiceRegistry
