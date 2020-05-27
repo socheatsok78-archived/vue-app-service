@@ -28,7 +28,7 @@ const AuthService = new ServiceRegistry({
     async login ({ $axios }, { username, password }) {
       try {
         const { data: user } = await $axios
-          .post('/auth/api/v1/login', { username, password })
+          .post('/login', { username, password })
 
         return user
       } catch (error) {
@@ -56,3 +56,6 @@ $app.$service.auth.login({username: 'admin', password: 'admin'})
 ```js
 $app.$service.unregister('auth')
 ```
+
+## License
+License under [MIT](LICENSE)
