@@ -6,6 +6,8 @@ import ServiceRegistry from './foundations/ServiceRegistry'
 
 const ServiceBus = new Bus();
 
+const URL_MATCH_PATTERN = /(https?:\/{2})?\b((?=[a-z0-9-]{1,63}\.)[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b/
+
 export default class ServiceContainer {
     /**
      * @type {Application}
@@ -130,8 +132,7 @@ export default class ServiceContainer {
         const appConfig = this.#app.config;
 
         if (!!appConfig.baseURL) {
-            const gatewayURL = new URL(appConfig.baseURL)
-            gatewayURL.pathname = config.baseURL
+            const gatewayURL = new URL(config.baseURL || '', appConfig.baseURL)
             config.baseURL = `${gatewayURL}`
         }
 
