@@ -128,10 +128,12 @@ export default class ServiceContainer {
      */
     _resolveRequestConfig(config) {
         const appConfig = this.#app.config;
-        const gatewayURL = new URL(appConfig.baseURL)
 
-        gatewayURL.pathname = config.baseURL
-        config.baseURL = `${gatewayURL}`
+        if (!!appConfig.baseURL) {
+            const gatewayURL = new URL(appConfig.baseURL)
+            gatewayURL.pathname = config.baseURL
+            config.baseURL = `${gatewayURL}`
+        }
 
         return config
     }
