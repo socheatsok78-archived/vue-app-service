@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _axios = _interopRequireDefault(require("axios"));
+
 var _quickBus = _interopRequireDefault(require("@condenast/quick-bus"));
 
 var _Application = _interopRequireDefault(require("./Application"));
@@ -16,6 +18,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classPrivateFieldGet(receiver, privateMap) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to get private field on non-instance"); } if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
 
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to set private field on non-instance"); } if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } return value; }
+
+var ServiceBus = new _quickBus.default();
 
 class ServiceContainer {
   /**
@@ -73,6 +77,17 @@ class ServiceContainer {
 
     delete _classPrivateFieldGet(this, _services)[name];
     delete this[name];
+
+    this._emitServiceUnregisterEvent(service);
+  }
+  /**
+   * Register an event listener
+   * @param  {...any} args
+   */
+
+
+  on() {
+    return ServiceBus.on(...arguments);
   }
   /**
    * Complete register a new ServiceRegistry
@@ -91,6 +106,8 @@ class ServiceContainer {
       configurable: true,
       value: this._registerServiceMethods(service)
     });
+
+    this._emitServiceRegisterEvent(service);
   }
   /**
    * Register service methods
@@ -102,6 +119,9 @@ class ServiceContainer {
   _registerServiceMethods(service) {
     var serviceMethods = {};
     var tokens = Object.keys(service.methods);
+
+    var _requestWrapper = this._requestWrapper.bind(this);
+
     tokens.forEach(token => {
       serviceMethods[token] = function () {
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -109,12 +129,68 @@ class ServiceContainer {
         }
 
         return service.methods[token]({
-          $axios: service.$http,
+          $axios: _requestWrapper(service.$http),
           $config: service.$config
         }, ...args);
       };
     });
     return serviceMethods;
+  }
+  /**
+   * Wrap Request Instance
+   * @param {axios} http
+   */
+
+
+  _requestWrapper(http) {
+    http.interceptors.request.use(this._resolveRequestConfig.bind(this), this._rejectRequestConfig.bind(this));
+    return http;
+  }
+  /**
+   * Resolve request interceptor
+   * @param {any} config
+   */
+
+
+  _resolveRequestConfig(config) {
+    var appConfig = _classPrivateFieldGet(this, _app).config;
+
+    var gatewayURL = new URL(appConfig.baseURL);
+    gatewayURL.pathname = config.baseURL;
+    config.baseURL = "".concat(gatewayURL);
+    return config;
+  }
+  /**
+   * Rejest request interceptor
+   * @param {any} error
+   */
+
+
+  _rejectRequestConfig(error) {
+    return Promise.reject(error);
+  }
+  /**
+   * Emit service registered event
+   * @param {ServiceRegistry} service Service Registry Instance
+   */
+
+
+  _emitServiceRegisterEvent(service) {
+    ServiceBus.emit('register', {
+      $axios: service.$http,
+      $config: service.$config
+    });
+  }
+  /**
+   * Emit service unregistered event
+   * @param {ServiceRegistry} service Service Registry Instance
+   */
+
+
+  _emitServiceUnregisterEvent(service) {
+    ServiceBus.emit('unregister', {
+      $service: service
+    });
   }
   /**
    * Throw Service muse be ServiceRegistry exception

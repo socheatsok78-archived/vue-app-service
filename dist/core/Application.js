@@ -31,6 +31,10 @@ class Application {
    */
 
   /**
+   * @type {AxiosRequestConfig}
+   */
+
+  /**
    * Create new Application instance
    * @param {ApplicationOptions} options
    */
@@ -46,8 +50,11 @@ class Application {
       value: void 0
     });
 
+    _defineProperty(this, "config", {});
+
     this.name = options.name || "__Application__".concat(Date.now());
     this.description = options.description || '';
+    this.config = options.config || {};
 
     this._bootstrapServiceContainer();
   }
@@ -73,6 +80,7 @@ class Application {
  * @typedef ApplicationOptions
  * @property {string} name Application name
  * @property {string} description Application description
+ * @property {AxiosRequestConfig} config Application gateway options
  */
 
 

@@ -65,7 +65,7 @@ class ServiceRegistry {
 
     this._createHttpInstance(service.config || {});
 
-    this._bootstrapMethods(service.methods || {});
+    this._bootstrapMethods(service.methods);
   }
   /**
    * @returns {axios} Request instance
