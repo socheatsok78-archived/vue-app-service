@@ -1,7 +1,10 @@
+import axios from 'axios'
 import Bus from '@condenast/quick-bus'
 
 import Application from './Application'
 import ServiceRegistry from './foundations/ServiceRegistry'
+
+const ServiceBus = new Bus();
 
 export default class ServiceContainer {
     /**
@@ -45,8 +48,20 @@ export default class ServiceContainer {
             this._throwServiceNotExistException(name);
         }
 
+        const service = this.#services[name]
+
         delete this.#services[name];
         delete this[name];
+
+        this._emitServiceUnregisterEvent(service)
+    }
+
+    /**
+     * Register an event listener
+     * @param  {...any} args
+     */
+    on(...args) {
+        return ServiceBus.on(...args)
     }
 
     /**
@@ -65,6 +80,8 @@ export default class ServiceContainer {
             configurable: true,
             value: this._registerServiceMethods(service)
         })
+
+        this._emitServiceRegisterEvent(service)
     }
 
     /**
@@ -75,12 +92,13 @@ export default class ServiceContainer {
     _registerServiceMethods(service) {
         const serviceMethods = {}
         const tokens = Object.keys(service.methods)
+        const _requestWrapper = this._requestWrapper.bind(this)
 
         tokens.forEach(token => {
             serviceMethods[token] = function (...args) {
                 return service.methods[token](
                     {
-                        $axios: service.$http,
+                        $axios: _requestWrapper(service.$http),
                         $config: service.$config
                     },
                     ...args
@@ -89,6 +107,62 @@ export default class ServiceContainer {
         })
 
         return serviceMethods;
+    }
+
+    /**
+     * Wrap Request Instance
+     * @param {axios} http
+     */
+    _requestWrapper(http) {
+        http.interceptors.request.use(
+            this._resolveRequestConfig.bind(this),
+            this._rejectRequestConfig.bind(this)
+        )
+
+        return http
+    }
+
+    /**
+     * Resolve request interceptor
+     * @param {any} config
+     */
+    _resolveRequestConfig(config) {
+        const appConfig = this.#app.config;
+        const gatewayURL = new URL(appConfig.baseURL)
+
+        gatewayURL.pathname = config.baseURL
+        config.baseURL = `${gatewayURL}`
+
+        return config
+    }
+
+    /**
+     * Rejest request interceptor
+     * @param {any} error
+     */
+    _rejectRequestConfig(error) {
+        return Promise.reject(error)
+    }
+
+    /**
+     * Emit service registered event
+     * @param {ServiceRegistry} service Service Registry Instance
+     */
+    _emitServiceRegisterEvent(service) {
+        ServiceBus.emit('register', {
+            $axios: service.$http,
+            $config: service.$config
+        })
+    }
+
+    /**
+     * Emit service unregistered event
+     * @param {ServiceRegistry} service Service Registry Instance
+     */
+    _emitServiceUnregisterEvent(service) {
+        ServiceBus.emit('unregister', {
+            $service: service
+        })
     }
 
     /**
