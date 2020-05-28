@@ -4,6 +4,7 @@ import { AxiosStatic, AxiosRequestConfig } from "axios/index";
 export type ApplicationOptions = {
     name: string,
     description: string,
+    config?: AxiosRequestConfig,
 }
 
 export type ServiceRegistryOptions = {
@@ -18,9 +19,9 @@ export type ServiceMethods = {
 }
 
 export type ServiceMethodOptions = {
+    $service?: ServiceRegistry,
     $axios: AxiosStatic,
-    $config: AxiosRequestConfig,
-    $service?: ServiceRegistry
+    $config: AxiosRequestConfig
 }
 
 export type ServiceMethod = <T>(options: ServiceMethodOptions, payload: <T>() => T) => T;
