@@ -1,4 +1,4 @@
-# Vue.js API Gateway Manager \w axios
+# Vue.js App Service Manager \w axios
 
 > coming soon...
 
