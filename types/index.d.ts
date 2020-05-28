@@ -24,6 +24,9 @@ export type ServiceMethodOptions = {
 
 export type ServiceMethod = <T>(options: ServiceMethodOptions, payload: <T>() => T) => T;
 
+export type RemoveServiceEventListner = () => void
+export type ServiceEventListener = ({ $axios: AxiosStatic, $config: AxiosRequestConfig, $service: ServiceRegistry }) => void
+
 export default class Application {
     /**
      * Application name
@@ -65,6 +68,13 @@ export class ServiceContainer {
      * @param {string} name Service name
      */
     unregister(name: string): void;
+
+    /**
+     * Register an event listener
+     * @param {string} name
+     * @param {ServiceEventListener} callback
+     */
+    on(name: string, callback: ServiceEventListener): RemoveServiceEventListner;
 }
 
 export class ServiceRegistry {
