@@ -93,5 +93,26 @@ $app.$service.on('unregister', ({ $service }) => {
 })
 ```
 
+**Update application config**
+
+You can create new instance with the configuration in place
+
+```js
+const $app = new Application({
+    name: 'Example Application',
+    config: {
+        baseURL: 'https://localhost:8080/api'
+    }
+})
+```
+
+or you can update the configuration later on...
+
+```js
+$app.$config.update({
+    baseURL: 'https://localhost:8080/api'
+})
+```
+
 ## License
 License under [MIT](LICENSE)
