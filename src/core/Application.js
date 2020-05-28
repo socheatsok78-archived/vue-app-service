@@ -18,12 +18,18 @@ export default class Application {
     #service;
 
     /**
+     * @type {AxiosRequestConfig}
+     */
+    config = {};
+
+    /**
      * Create new Application instance
      * @param {ApplicationOptions} options
      */
     constructor(options = {}) {
         this.name = options.name || `__Application__${Date.now()}`;
         this.description = options.description || '';
+        this.config = options.config || {}
 
         this._bootstrapServiceContainer();
     }
@@ -47,4 +53,5 @@ export default class Application {
  * @typedef ApplicationOptions
  * @property {string} name Application name
  * @property {string} description Application description
+ * @property {AxiosRequestConfig} config Application gateway options
  */
