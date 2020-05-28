@@ -154,7 +154,7 @@ class ServiceContainer {
 
 
   _resolveRequestConfig(config) {
-    var appConfig = _classPrivateFieldGet(this, _app).config;
+    var appConfig = _classPrivateFieldGet(this, _app).$config;
 
     if (!!appConfig.baseURL) {
       var gatewayURL = new URL(config.baseURL || '', appConfig.baseURL);

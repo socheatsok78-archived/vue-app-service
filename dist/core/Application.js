@@ -77,7 +77,7 @@ class Application {
    */
 
 
-  get config() {
+  get $config() {
     return _classPrivateFieldGet(this, _config);
   }
   /**
