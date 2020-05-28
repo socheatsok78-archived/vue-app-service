@@ -155,9 +155,12 @@ class ServiceContainer {
   _resolveRequestConfig(config) {
     var appConfig = _classPrivateFieldGet(this, _app).config;
 
-    var gatewayURL = new URL(appConfig.baseURL);
-    gatewayURL.pathname = config.baseURL;
-    config.baseURL = "".concat(gatewayURL);
+    if (!!appConfig.baseURL) {
+      var gatewayURL = new URL(appConfig.baseURL);
+      gatewayURL.pathname = config.baseURL;
+      config.baseURL = "".concat(gatewayURL);
+    }
+
     return config;
   }
   /**
