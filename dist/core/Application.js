@@ -9,6 +9,8 @@ var _axios = require("axios");
 
 var _ServiceContainer = _interopRequireDefault(require("./ServiceContainer"));
 
+var _Config = _interopRequireDefault(require("./foundations/Config"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -31,7 +33,7 @@ class Application {
    */
 
   /**
-   * @type {AxiosRequestConfig}
+   * @type {Config}
    */
 
   /**
@@ -50,11 +52,15 @@ class Application {
       value: void 0
     });
 
-    _defineProperty(this, "config", {});
+    _config.set(this, {
+      writable: true,
+      value: void 0
+    });
 
     this.name = options.name || "__Application__".concat(Date.now());
     this.description = options.description || '';
-    this.config = options.config || {};
+
+    this._bootstrapConfig(options.config || {});
 
     this._bootstrapServiceContainer();
   }
@@ -67,12 +73,31 @@ class Application {
     return _classPrivateFieldGet(this, _service);
   }
   /**
+   * @returns {Config}
+   */
+
+
+  get config() {
+    return _classPrivateFieldGet(this, _config);
+  }
+  /**
    * Bootstrap Application's ServiceContainer
    */
 
 
   _bootstrapServiceContainer() {
-    _classPrivateFieldSet(this, _service, new _ServiceContainer.default(this));
+    var instance = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this;
+
+    _classPrivateFieldSet(this, _service, new _ServiceContainer.default(instance));
+  }
+  /**
+   * Bootstrap Application's Config
+   * @param {AxiosRequestConfig} config
+   */
+
+
+  _bootstrapConfig(config) {
+    _classPrivateFieldSet(this, _config, new _Config.default(config));
   }
 
 }
@@ -87,3 +112,5 @@ class Application {
 exports.default = Application;
 
 var _service = new WeakMap();
+
+var _config = new WeakMap();

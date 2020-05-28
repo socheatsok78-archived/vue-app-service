@@ -20,6 +20,7 @@ function _classPrivateFieldGet(receiver, privateMap) { var descriptor = privateM
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to set private field on non-instance"); } if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } return value; }
 
 var ServiceBus = new _quickBus.default();
+var URL_MATCH_PATTERN = /(https?:\/{2})?\b((?=[a-z0-9-]{1,63}\.)[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b/;
 
 class ServiceContainer {
   /**
@@ -156,8 +157,7 @@ class ServiceContainer {
     var appConfig = _classPrivateFieldGet(this, _app).config;
 
     if (!!appConfig.baseURL) {
-      var gatewayURL = new URL(appConfig.baseURL);
-      gatewayURL.pathname = config.baseURL;
+      var gatewayURL = new URL(config.baseURL || '', appConfig.baseURL);
       config.baseURL = "".concat(gatewayURL);
     }
 

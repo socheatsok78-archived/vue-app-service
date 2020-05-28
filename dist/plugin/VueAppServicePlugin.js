@@ -15,17 +15,23 @@ class VueAppServicePlugin {
    * @param {VueConstructor} Vue
    */
   static install(Vue) {
-    Vue.mixin({
-      computed: {
-        $app() {
-          return this.$root.$options.$app;
-        },
+    Object.defineProperty(Vue.prototype, '$app', {
+      enumerable: true,
+      configurable: true,
 
-        $service() {
-          return this.$app.$service;
-        }
-
+      get() {
+        return this.$root.$options.$app;
       }
+
+    });
+    Object.defineProperty(Vue.prototype, '$service', {
+      enumerable: true,
+      configurable: true,
+
+      get() {
+        return this.$root.$options.$app.$service;
+      }
+
     });
   }
 
