@@ -19,13 +19,14 @@ export type ServiceMethods = {
 
 export type ServiceMethodOptions = {
     $axios: AxiosStatic,
-    $config: AxiosRequestConfig
+    $config: AxiosRequestConfig,
+    $service?: ServiceRegistry
 }
 
 export type ServiceMethod = <T>(options: ServiceMethodOptions, payload: <T>() => T) => T;
 
 export type RemoveServiceEventListner = () => void
-export type ServiceEventListener = ({ $axios: AxiosStatic, $config: AxiosRequestConfig, $service: ServiceRegistry }) => void
+export type ServiceEventListener = (options: ServiceMethodOptions) => void
 
 export default class Application {
     /**
@@ -37,6 +38,11 @@ export default class Application {
      * Application description
      */
     description: string;
+
+    /**
+     * @type {AxiosRequestConfig}
+     */
+    config: AxiosRequestConfig;
 
     /**
      * Create new Application instance
