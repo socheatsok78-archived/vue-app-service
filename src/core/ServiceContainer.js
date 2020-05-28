@@ -129,7 +129,7 @@ export default class ServiceContainer {
      * @param {any} config
      */
     _resolveRequestConfig(config) {
-        const appConfig = this.#app.config;
+        const appConfig = this.#app.$config;
 
         if (!!appConfig.baseURL) {
             const gatewayURL = new URL(config.baseURL || '', appConfig.baseURL)

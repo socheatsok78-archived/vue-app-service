@@ -40,11 +40,6 @@ export default class Application {
     description: string;
 
     /**
-     * @type {AxiosRequestConfig}
-     */
-    config: AxiosRequestConfig;
-
-    /**
      * Create new Application instance
      * @param {ApplicationOptions} config
      */
@@ -54,6 +49,11 @@ export default class Application {
      * @returns {ServiceContainer} ServiceContainer
      */
     get $service(): ServiceContainer;
+
+    /**
+     * @returns {Config} Config
+     */
+    get $config(): Config;
 }
 
 export class ServiceContainer {

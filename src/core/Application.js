@@ -45,7 +45,7 @@ export default class Application {
     /**
      * @returns {Config}
      */
-    get config() {
+    get $config() {
         return this.#config;
     }
 
