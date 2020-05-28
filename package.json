@@ -8,8 +8,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rm -rf dist/",
-    "build": "babel src/ -d dist/",
-    "prepare": "yarn run build"
+    "build": "babel src/ -d dist/"
   },
   "dependencies": {
     "@condenast/quick-bus": "^0.2.0",
