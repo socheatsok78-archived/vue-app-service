@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import ServiceContainer from "./ServiceContainer";
+import Config from './foundations/Config';
 
 export default class Application {
     /**
@@ -18,9 +19,9 @@ export default class Application {
     #service;
 
     /**
-     * @type {AxiosRequestConfig}
+     * @type {Config}
      */
-    config = {};
+    #config;
 
     /**
      * Create new Application instance
@@ -29,8 +30,8 @@ export default class Application {
     constructor(options = {}) {
         this.name = options.name || `__Application__${Date.now()}`;
         this.description = options.description || '';
-        this.config = options.config || {}
 
+        this._bootstrapConfig(options.config || {});
         this._bootstrapServiceContainer();
     }
 
@@ -42,10 +43,25 @@ export default class Application {
     }
 
     /**
+     * @returns {Config}
+     */
+    get config() {
+        return this.#config;
+    }
+
+    /**
      * Bootstrap Application's ServiceContainer
      */
-    _bootstrapServiceContainer() {
-        this.#service = new ServiceContainer(this);
+    _bootstrapServiceContainer(instance = this) {
+        this.#service = new ServiceContainer(instance);
+    }
+
+    /**
+     * Bootstrap Application's Config
+     * @param {AxiosRequestConfig} config
+     */
+    _bootstrapConfig(config) {
+        this.#config = new Config(config)
     }
 }
 
