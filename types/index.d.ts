@@ -116,6 +116,26 @@ export class ServiceRegistry {
     get $config(): AxiosRequestConfig;
 }
 
+export class Config {
+    /**
+     * Create a new Config instance
+     * @param {AxiosRequestConfig} config
+     */
+    constructor(config: AxiosRequestConfig);
+
+    /**
+     * Update config
+     * @param {AxiosRequestConfig} config
+     */
+    update(config: AxiosRequestConfig): void;
+
+    /**
+     * Sync a remote configuration file
+     * @param {string} url Remote config URL
+     */
+    sync(url: string): void;
+}
+
 export class VueAppServicePlugin {
     /**
      * Install Vue App Service Plugin
