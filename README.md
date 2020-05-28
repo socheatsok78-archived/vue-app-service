@@ -53,6 +53,7 @@ $app.$service.auth.login({username: 'admin', password: 'admin'})
 ```
 
 **Configure the registered services**
+
 Once the service has successfully registered the `register` event will be fired.
 
 ```js
