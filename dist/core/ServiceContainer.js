@@ -180,6 +180,7 @@ class ServiceContainer {
 
   _emitServiceRegisterEvent(service) {
     ServiceBus.emit('register', {
+      $service: service,
       $axios: service.$http,
       $config: service.$config
     });
@@ -192,7 +193,9 @@ class ServiceContainer {
 
   _emitServiceUnregisterEvent(service) {
     ServiceBus.emit('unregister', {
-      $service: service
+      $service: service,
+      $axios: service.$http,
+      $config: service.$config
     });
   }
   /**

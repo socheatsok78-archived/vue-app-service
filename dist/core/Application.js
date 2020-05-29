@@ -5,11 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _axios = require("axios");
+var _quickBus = _interopRequireDefault(require("@condenast/quick-bus"));
 
 var _ServiceContainer = _interopRequireDefault(require("./ServiceContainer"));
 
 var _Config = _interopRequireDefault(require("./foundations/Config"));
+
+var _axios = require("axios");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18,6 +20,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to set private field on non-instance"); } if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } return value; }
 
 function _classPrivateFieldGet(receiver, privateMap) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to get private field on non-instance"); } if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
+var EventBus = new _quickBus.default();
 
 class Application {
   /**
@@ -63,6 +67,8 @@ class Application {
     this._bootstrapConfig(options.config || {});
 
     this._bootstrapServiceContainer();
+
+    this._emitReadyEvent();
   }
   /**
    * @returns {ServiceContainer} ServiceContainer
@@ -79,6 +85,25 @@ class Application {
 
   get $config() {
     return _classPrivateFieldGet(this, _config);
+  }
+  /**
+   * Register an event listener
+   * @param  {...any} args
+   */
+
+
+  on() {
+    return EventBus.on(...arguments);
+  }
+  /**
+   * Register an event listener
+   * @static
+   * @param  {...any} args
+   */
+
+
+  static on() {
+    return EventBus.on(...arguments);
   }
   /**
    * Bootstrap Application's ServiceContainer
@@ -98,6 +123,14 @@ class Application {
 
   _bootstrapConfig(config) {
     _classPrivateFieldSet(this, _config, new _Config.default(config));
+  }
+  /**
+   * Emit ready event
+   */
+
+
+  _emitReadyEvent() {
+    EventBus.emit('ready', this);
   }
 
 }
