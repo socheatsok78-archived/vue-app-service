@@ -1,5 +1,8 @@
-import { AxiosRequestConfig } from 'axios'
+import Bus from '@condenast/quick-bus'
 import { warn } from '../utils';
+import { AxiosRequestConfig } from 'axios'
+
+const EventBus = new Bus();
 
 export default class Config {
     #cachedConfig = {};
@@ -9,17 +12,21 @@ export default class Config {
      * @param {AxiosRequestConfig} config
      */
     constructor(config = {}) {
-        this.update(config)
+        this.update(config, false)
     }
 
     /**
      * Update config
      * @param {AxiosRequestConfig} config
      */
-    update(config) {
+    update(config, fireEvent = true) {
         Object.assign(this.#cachedConfig, config)
 
         this._defineProperty(this.#cachedConfig)
+
+        if (fireEvent) {
+            this._emitUpdateEvent(config)
+        }
     }
 
     /**
@@ -31,10 +38,29 @@ export default class Config {
             const res = await fetch(url)
             const config = await res.json()
 
+            this._emitSyncEvent(config)
+
             this.update(config)
         } catch (error) {
             warn(`Unable synchronize configurations from: ${url}`)
         }
+    }
+
+    /**
+     * Register an event listener
+     * @param  {...any} args
+     */
+    on(...args) {
+        return EventBus.on(...args)
+    }
+
+    /**
+     * Register an event listener
+     * @static
+     * @param  {...any} args
+     */
+    static on(...args) {
+        return EventBus.on(...args)
     }
 
     /**
@@ -55,5 +81,21 @@ export default class Config {
                 }
             })
         })
+    }
+
+    /**
+     * Emit update event
+     * @param {AxiosRequestConfig} config
+     */
+    _emitUpdateEvent(config) {
+        EventBus.emit('update', config)
+    }
+
+    /**
+     * Emit sync event
+     * @param {AxiosRequestConfig} config
+     */
+    _emitSyncEvent(config) {
+        EventBus.emit('sync', config)
     }
 }

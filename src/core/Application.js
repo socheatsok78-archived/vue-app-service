@@ -1,6 +1,10 @@
-import { AxiosRequestConfig } from 'axios'
+import Bus from '@condenast/quick-bus'
 import ServiceContainer from "./ServiceContainer";
 import Config from './foundations/Config';
+
+import { AxiosRequestConfig } from 'axios'
+
+const EventBus = new Bus();
 
 export default class Application {
     /**
@@ -33,6 +37,7 @@ export default class Application {
 
         this._bootstrapConfig(options.config || {});
         this._bootstrapServiceContainer();
+        this._emitReadyEvent()
     }
 
     /**
@@ -50,6 +55,23 @@ export default class Application {
     }
 
     /**
+     * Register an event listener
+     * @param  {...any} args
+     */
+    on(...args) {
+        return EventBus.on(...args)
+    }
+
+    /**
+     * Register an event listener
+     * @static
+     * @param  {...any} args
+     */
+    static on(...args) {
+        return EventBus.on(...args)
+    }
+
+    /**
      * Bootstrap Application's ServiceContainer
      */
     _bootstrapServiceContainer(instance = this) {
@@ -62,6 +84,13 @@ export default class Application {
      */
     _bootstrapConfig(config) {
         this.#config = new Config(config)
+    }
+
+    /**
+     * Emit ready event
+     */
+    _emitReadyEvent() {
+        EventBus.emit('ready', this)
     }
 }
 
