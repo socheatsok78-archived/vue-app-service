@@ -37,7 +37,7 @@ export default class Application {
 
         this._bootstrapConfig(options.config || {});
         this._bootstrapServiceContainer();
-        this._emitReadyEvent()
+        this._emitConstructorReadyEvent()
     }
 
     /**
@@ -91,6 +91,13 @@ export default class Application {
      */
     _emitReadyEvent() {
         EventBus.emit('ready', this)
+    }
+
+    /**
+     * Emit constructor ready event
+     */
+    _emitConstructorReadyEvent() {
+        setTimeout(this._emitReadyEvent.bind(this));
     }
 }
 
