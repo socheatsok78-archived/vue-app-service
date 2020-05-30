@@ -9,12 +9,16 @@ var _vue = _interopRequireDefault(require("vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 class VueAppServicePlugin {
   /**
    * Install Vue App Service Plugin
    * @param {VueConstructor} Vue
    */
   static install(Vue) {
+    if (this.installed) return;
+    this.installed = true;
     Object.defineProperty(Vue.prototype, '$app', {
       enumerable: true,
       configurable: true,
@@ -38,3 +42,5 @@ class VueAppServicePlugin {
 }
 
 exports.default = VueAppServicePlugin;
+
+_defineProperty(VueAppServicePlugin, "installed", false);
