@@ -68,7 +68,7 @@ class Application {
 
     this._bootstrapServiceContainer();
 
-    this._emitReadyEvent();
+    this._emitConstructorReadyEvent();
   }
   /**
    * @returns {ServiceContainer} ServiceContainer
@@ -131,6 +131,14 @@ class Application {
 
   _emitReadyEvent() {
     EventBus.emit('ready', this);
+  }
+  /**
+   * Emit constructor ready event
+   */
+
+
+  _emitConstructorReadyEvent() {
+    setTimeout(this._emitReadyEvent.bind(this));
   }
 
 }
